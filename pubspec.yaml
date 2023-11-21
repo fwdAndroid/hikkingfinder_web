@@ -30,14 +30,17 @@ environment:
 dependencies:
   calender_picker: ^2.0.1
   carousel_slider: ^4.2.1
+  cloud_firestore: ^4.13.2
   cupertino_icons: ^1.0.2
   drop_shadow: ^0.1.0
   firebase_core: ^2.22.0
+  firebase_storage: ^11.5.2
   flag: ^7.0.0
   flutter:
     sdk: flutter
   google_fonts: ^6.1.0
   syncfusion_flutter_calendar: ^21.2.3
+  uuid: ^4.2.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0
