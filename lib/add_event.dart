@@ -1,8 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:hikkingfinder_web/main_screen.dart';
+import 'package:hikkingfinder_web/services/firestore_methods.dart';
 import 'package:hikkingfinder_web/utils/controllers.dart';
 import 'package:hikkingfinder_web/utils/image.dart';
+import 'package:hikkingfinder_web/utils/snakbar.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddEvent extends StatefulWidget {
@@ -521,12 +524,17 @@ class _AddEventState extends State<AddEvent> {
                                             borderRadius:
                                                 BorderRadius.circular(16.0)),
                                         backgroundColor: Color(0xff02D80A)),
-                                    onPressed: () {},
-                                    child: Text(
-                                      "Approve/ Publish",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                    )),
+                                    onPressed: createEvent,
+                                    child: _isLoading
+                                        ? Center(
+                                            child: CircularProgressIndicator(),
+                                          )
+                                        : Text(
+                                            "Approve/ Publish",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16),
+                                          )),
                               ),
                               SizedBox(
                                 width: 20,
@@ -564,10 +572,59 @@ class _AddEventState extends State<AddEvent> {
     );
   }
 
+  //Functions
   void selectImage() async {
     Uint8List ui = await pickImage(ImageSource.gallery);
     setState(() {
       _eventPhoto = ui;
     });
   }
+
+  void createEvent() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String rse = await FirebaseMethods().createEvent(
+        _eventPhoto!,
+        eventlocationController.text,
+        eventDateController.text,
+        eventDescriptionController.text,
+        eventNameController.text,
+        eventElevationControler.text,
+        eventDistanceController.text,
+        eventtimeController.text,
+        eventPageController.text);
+
+    print(rse);
+    setState(() {
+      _isLoading = false;
+    });
+    if (rse != 'sucess') {
+      showSnakBar(rse, context);
+      eventlocationController.clear();
+      eventNameController.clear();
+      eventDescriptionController.clear();
+      eventElevationControler.clear();
+      eventDistanceController.clear();
+      eventtimeController.clear();
+      eventDateController.clear();
+      eventPageController.clear();
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (builder) => MainScreen()));
+    } else {
+      eventlocationController.clear();
+      eventNameController.clear();
+      eventDescriptionController.clear();
+      eventElevationControler.clear();
+      eventDistanceController.clear();
+      eventtimeController.clear();
+      eventDateController.clear();
+      eventPageController.clear();
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (builder) => MainScreen()));
+    }
+  }
 }
+// Future<void> addItems(List<String> itemList) async {
+//   await itemsCollection.add({'values': itemList});
+// }
