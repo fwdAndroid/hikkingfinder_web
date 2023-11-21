@@ -39,6 +39,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^6.1.0
+  image_picker: ^1.0.4
   random_uint8list: ^1.0.2
   syncfusion_flutter_calendar: ^21.2.3
   uuid: ^4.2.1

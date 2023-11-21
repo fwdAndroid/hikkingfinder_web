@@ -1,4 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:hikkingfinder_web/utils/controllers.dart';
+import 'package:hikkingfinder_web/utils/image.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddEvent extends StatefulWidget {
   const AddEvent({super.key});
@@ -8,6 +13,9 @@ class AddEvent extends StatefulWidget {
 }
 
 class _AddEventState extends State<AddEvent> {
+  Uint8List? _eventPhoto;
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,6 +159,7 @@ class _AddEventState extends State<AddEvent> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              controller: eventNameController,
                               decoration: InputDecoration(
                                   fillColor: Colors.white,
                                   filled: true,
@@ -181,34 +190,24 @@ class _AddEventState extends State<AddEvent> {
                             ),
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(left: 20, right: 20),
-                          height: 220,
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: ((context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 180,
-                                        child: Image.asset(
-                                          "assets/m.png",
-                                          width: 150,
-                                          height: 200,
-                                          fit: BoxFit.fill,
-                                          filterQuality: FilterQuality.high,
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.cancel,
-                                        color: Colors.red,
-                                      )
-                                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: _eventPhoto != null
+                              ? InkWell(
+                                  onTap: selectImage,
+                                  child: Image.memory(
+                                    _eventPhoto!,
+                                    width: 335,
+                                    height: 100,
+                                    fit: BoxFit.fitHeight,
                                   ),
-                                );
-                              })),
+                                )
+                              : InkWell(
+                                  onTap: selectImage,
+                                  child: Image.asset(
+                                    "assets/m.png",
+                                    height: 100,
+                                  )),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -225,7 +224,7 @@ class _AddEventState extends State<AddEvent> {
                                       borderRadius:
                                           BorderRadius.circular(16.0)),
                                   backgroundColor: Color(0xff02D80A)),
-                              onPressed: () {},
+                              onPressed: selectImage,
                               icon: Icon(
                                 Icons.add_circle,
                                 color: Colors.black,
@@ -260,6 +259,7 @@ class _AddEventState extends State<AddEvent> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              controller: eventDescriptionController,
                               maxLines: 6,
                               decoration: InputDecoration(
                                   fillColor: Colors.white,
@@ -296,6 +296,7 @@ class _AddEventState extends State<AddEvent> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              controller: eventlocationController,
                               decoration: InputDecoration(
                                   fillColor: Colors.white,
                                   filled: true,
@@ -332,6 +333,7 @@ class _AddEventState extends State<AddEvent> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              controller: eventDateController,
                               decoration: InputDecoration(
                                   suffixIcon: Icon(Icons.calendar_month),
                                   fillColor: Colors.white,
@@ -376,6 +378,7 @@ class _AddEventState extends State<AddEvent> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
+                                      controller: eventDistanceController,
                                       decoration: InputDecoration(
                                           fillColor: Colors.white,
                                           filled: true,
@@ -413,6 +416,7 @@ class _AddEventState extends State<AddEvent> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
+                                      controller: eventElevationControler,
                                       decoration: InputDecoration(
                                           fillColor: Colors.white,
                                           filled: true,
@@ -450,6 +454,7 @@ class _AddEventState extends State<AddEvent> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
+                                      controller: eventtimeController,
                                       decoration: InputDecoration(
                                           fillColor: Colors.white,
                                           filled: true,
@@ -489,6 +494,7 @@ class _AddEventState extends State<AddEvent> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              controller: eventPageController,
                               decoration: InputDecoration(
                                   fillColor: Colors.white,
                                   filled: true,
@@ -534,7 +540,9 @@ class _AddEventState extends State<AddEvent> {
                                             borderRadius:
                                                 BorderRadius.circular(16.0)),
                                         backgroundColor: Colors.red),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
                                     child: Text(
                                       "Delete Event",
                                       style: TextStyle(
@@ -554,5 +562,12 @@ class _AddEventState extends State<AddEvent> {
         ),
       ),
     );
+  }
+
+  void selectImage() async {
+    Uint8List ui = await pickImage(ImageSource.gallery);
+    setState(() {
+      _eventPhoto = ui;
+    });
   }
 }
