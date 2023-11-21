@@ -65,41 +65,6 @@ class _AddEventState extends State<AddEvent> {
                         leading: Column(
                           children: [
                             Text(
-                              "09",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              "July",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 10),
-                            )
-                          ],
-                        ),
-                        title: Text(
-                          "Scenery Hike",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16),
-                        ),
-                        subtitle: Text(
-                          "Laklouk, Mount lebanon",
-                          style: TextStyle(color: Colors.white, fontSize: 10),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Divider(
-                          color: Colors.white,
-                        ),
-                      ),
-                      ListTile(
-                        leading: Column(
-                          children: [
-                            Text(
                               "11",
                               style: TextStyle(
                                   color: Color(0xffFFFF00),
@@ -127,76 +92,6 @@ class _AddEventState extends State<AddEvent> {
                         ),
                         trailing: Icon(Icons.arrow_forward_ios,
                             color: Color(0xffFFFF00)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Divider(
-                          color: Colors.white,
-                        ),
-                      ),
-                      ListTile(
-                        leading: Column(
-                          children: [
-                            Text(
-                              "11",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              "July",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 10),
-                            )
-                          ],
-                        ),
-                        title: Text(
-                          "Night Hike",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16),
-                        ),
-                        subtitle: Text(
-                          "Laklouk, Mount lebanon",
-                          style: TextStyle(color: Colors.white, fontSize: 10),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Divider(
-                          color: Colors.white,
-                        ),
-                      ),
-                      ListTile(
-                        leading: Column(
-                          children: [
-                            Text(
-                              "25",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              "July",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 10),
-                            )
-                          ],
-                        ),
-                        title: Text(
-                          "Camping Weekend",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16),
-                        ),
-                        subtitle: Text(
-                          "Laklouk, Mount lebanon",
-                          style: TextStyle(color: Colors.white, fontSize: 10),
-                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
