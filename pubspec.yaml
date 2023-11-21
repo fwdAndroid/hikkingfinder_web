@@ -32,6 +32,7 @@ dependencies:
   carousel_slider: ^4.2.1
   cupertino_icons: ^1.0.2
   drop_shadow: ^0.1.0
+  firebase_core: ^2.22.0
   flag: ^7.0.0
   flutter:
     sdk: flutter

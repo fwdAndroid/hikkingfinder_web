@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:hikkingfinder_web/add_event.dart';
 import 'package:hikkingfinder_web/main_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
