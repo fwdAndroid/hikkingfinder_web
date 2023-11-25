@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flag/flag_enum.dart';
 import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,24 @@ import 'package:hikkingfinder_web/event_page.dart';
 import 'package:hikkingfinder_web/tab_screen.dart';
 
 class SiteDetail extends StatefulWidget {
-  const SiteDetail({super.key});
+  String description;
+  String elevation;
+  String photo;
+  String time;
+  String name;
+  String location;
+  String date;
+  String distance;
+  SiteDetail(
+      {super.key,
+      required this.description,
+      required this.elevation,
+      required this.date,
+      required this.photo,
+      required this.time,
+      required this.distance,
+      required this.location,
+      required this.name});
 
   @override
   State<SiteDetail> createState() => _SiteDetailState();
@@ -32,8 +50,8 @@ class _SiteDetailState extends State<SiteDetail> {
                     children: [
                       Container(
                         margin: EdgeInsets.only(left: 20),
-                        child: Image.asset(
-                          "assets/logo.png",
+                        child: Image.network(
+                          widget.photo,
                           height: 67,
                           width: 121,
                         ),
@@ -195,7 +213,7 @@ class _SiteDetailState extends State<SiteDetail> {
             Container(
               margin: EdgeInsets.only(left: 10),
               child: Text(
-                'Hikking Laklout together',
+                widget.name,
                 style: GoogleFonts.poppins(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -215,7 +233,7 @@ class _SiteDetailState extends State<SiteDetail> {
                     height: 196,
                     width: 711,
                     child: Text(
-                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                      widget.description,
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         color: Colors.white.withOpacity(.8),
@@ -240,7 +258,7 @@ class _SiteDetailState extends State<SiteDetail> {
                             SizedBox(
                               width: 8,
                             ),
-                            Text("Laklouk, Mount lebanon   ",
+                            Text(widget.location,
                                 style: GoogleFonts.poppins(
                                     color: Color(0xffA0A0A0),
                                     fontSize: 14,
@@ -263,7 +281,7 @@ class _SiteDetailState extends State<SiteDetail> {
                               SizedBox(
                                 width: 8,
                               ),
-                              Text("Saturday,12 June,6:00 am",
+                              Text(widget.date,
                                   style: GoogleFonts.poppins(
                                       color: Color(0xffA0A0A0),
                                       fontSize: 14,
@@ -291,7 +309,7 @@ class _SiteDetailState extends State<SiteDetail> {
                                         ),
                                       ),
                                       Text(
-                                        "32 KM",
+                                        widget.distance,
                                         style: TextStyle(
                                           color: Color(0xffffff00),
                                         ),
@@ -319,7 +337,7 @@ class _SiteDetailState extends State<SiteDetail> {
                                         ),
                                       ),
                                       Text(
-                                        "2456 M",
+                                        widget.elevation,
                                         style: TextStyle(
                                           fontSize: 17,
                                           color: Color(0xffffff00),
@@ -348,7 +366,7 @@ class _SiteDetailState extends State<SiteDetail> {
                                         ),
                                       ),
                                       Text(
-                                        "8 h",
+                                        widget.time,
                                         style: TextStyle(
                                           fontSize: 17,
                                           color: Color(0xffffff00),
@@ -407,129 +425,186 @@ class _SiteDetailState extends State<SiteDetail> {
                     ),
                   ),
                   Container(
-                    height: 200,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: ((context, index) {
-                          return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (builder) => SiteDetail()));
-                            },
-                            child: Card(
-                              color: Colors.transparent,
-                              child: Container(
-                                  height: 200,
-                                  child: Stack(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (builder) =>
-                                                      SiteDetail()));
-                                        },
-                                        child: Card(
-                                          child: Image.asset(
-                                            "assets/m.png",
-                                            width: 150,
-                                            height: 200,
-                                            fit: BoxFit.fill,
-                                            filterQuality: FilterQuality.high,
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        left: 80,
-                                        child: Container(
-                                          margin: EdgeInsets.only(top: 10),
-                                          decoration: BoxDecoration(
-                                              color: Color(0xffffff00),
-                                              borderRadius:
-                                                  BorderRadius.circular(40)),
-                                          width: 60,
-                                          height: 30,
-                                          child: Center(
-                                            child: Row(
+                    height: 220,
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection("events")
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          return ListView.builder(
+                              itemCount: snapshot.data!.docs.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: ((context, index) {
+                                var data = snapshot.data!.docs[index];
+
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (builder) => SiteDetail(
+                                                  name: data['eventName'],
+                                                  date: data['eventDate'],
+                                                  description:
+                                                      data['eventDescription'],
+                                                  elevation:
+                                                      data['eventElevation'],
+                                                  photo: data['eventPhoto'],
+                                                  time: data['eventTime'],
+                                                  distance:
+                                                      data['eventDistance'],
+                                                  location:
+                                                      data['eventLocation'],
+                                                )));
+                                  },
+                                  child: Card(
+                                    color: Colors.transparent,
+                                    child: Container(
+                                        height: 200,
+                                        child: Stack(
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (builder) =>
+                                                            SiteDetail(
+                                                              name: data[
+                                                                  'eventName'],
+                                                              date: data[
+                                                                  'eventDate'],
+                                                              description: data[
+                                                                  'eventDescription'],
+                                                              elevation: data[
+                                                                  'eventElevation'],
+                                                              photo: data[
+                                                                  'eventPhoto'],
+                                                              time: data[
+                                                                  'eventTime'],
+                                                              distance: data[
+                                                                  'eventDistance'],
+                                                              location: data[
+                                                                  'eventLocation'],
+                                                            )));
+                                              },
+                                              child: Card(
+                                                child: Image.network(
+                                                  data['eventPhoto'].toString(),
+                                                  width: 150,
+                                                  height: 200,
+                                                  fit: BoxFit.fill,
+                                                  filterQuality:
+                                                      FilterQuality.high,
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              left: 80,
+                                              child: Container(
+                                                margin:
+                                                    EdgeInsets.only(top: 10),
+                                                decoration: BoxDecoration(
+                                                    color: Color(0xffffff00),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            40)),
+                                                width: 60,
+                                                height: 30,
+                                                child: Center(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        data['eventDistance'],
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 9,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 3,
+                                                      ),
+                                                      Text(
+                                                        "KM",
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 9,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Text(
-                                                  "35",
-                                                  style: GoogleFonts.poppins(
-                                                      color: Colors.black,
-                                                      fontSize: 9,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                                const SizedBox(
-                                                  width: 3,
-                                                ),
-                                                Text(
-                                                  "KM",
-                                                  style: GoogleFonts.poppins(
-                                                      color: Colors.black,
-                                                      fontSize: 9,
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                                  textAlign: TextAlign.center,
+                                                Container(
+                                                  margin:
+                                                      EdgeInsets.only(left: 20),
+                                                  child: Text(
+                                                    data['eventName'],
+                                                    style: GoogleFonts.poppins(
+                                                        color: Colors.white,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
                                                 ),
                                               ],
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.only(left: 20),
-                                            child: Text(
-                                              "Hikking\nLakout\ntogether",
-                                              style: GoogleFonts.poppins(
-                                                  color: Colors.white,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Container(
-                                          margin: EdgeInsets.only(
-                                              left: 10, bottom: 25),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Icon(
-                                                Icons.location_pin,
-                                                color: Color(0xffffff00),
-                                                size: 12,
+                                            Align(
+                                              alignment: Alignment.bottomLeft,
+                                              child: Container(
+                                                margin: EdgeInsets.only(
+                                                    left: 10, bottom: 25),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.location_pin,
+                                                      color: Color(0xffffff00),
+                                                      size: 12,
+                                                    ),
+                                                    Text(
+                                                      data['eventLocation'],
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 9,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                              Text(
-                                                "Laklouk, Mnt Leb.",
-                                                style: GoogleFonts.poppins(
-                                                    color: Colors.white,
-                                                    fontSize: 9,
-                                                    fontWeight:
-                                                        FontWeight.normal),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  )),
-                            ),
-                          );
-                        })),
+                                            )
+                                          ],
+                                        )),
+                                  ),
+                                );
+                              }));
+                        }),
                   ),
                 ],
               ),

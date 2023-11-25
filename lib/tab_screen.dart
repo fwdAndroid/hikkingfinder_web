@@ -141,10 +141,10 @@ class _TabSearchState extends State<TabSearch> {
                       height: 200,
                       child: InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (builder) => SiteDetail()));
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (builder) => SiteDetail()));
                         },
                         child: Container(
                             height: 200,
@@ -152,11 +152,11 @@ class _TabSearchState extends State<TabSearch> {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (builder) =>
-                                                SiteDetail()));
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (builder) =>
+                                    //             SiteDetail()));
                                   },
                                   child: Card(
                                     child: Image.asset(
